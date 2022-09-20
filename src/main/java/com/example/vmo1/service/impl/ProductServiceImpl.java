@@ -4,12 +4,11 @@ import com.example.vmo1.commons.configs.MapperUtil;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Image;
 import com.example.vmo1.model.entity.Product;
-import com.example.vmo1.model.request.ProductDto;
-import com.example.vmo1.model.response.ProductResponse;
+import com.example.vmo1.model.request.ProductRequest;
 import com.example.vmo1.repository.ImageRepository;
 import com.example.vmo1.repository.ProductRepository;
+import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.ProductService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -23,10 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,9 +37,9 @@ public class ProductServiceImpl implements ProductService {
     private String path;
 
     @Override
-    public ProductDto save(ProductDto productDto, MultipartFile[] files) {
+    public ProductRequest save(ProductRequest productResquest, MultipartFile[] files) {
         // convert dto to entity
-        Product productRequest = MapperUtil.map(productDto, Product.class);
+        Product productRequest = MapperUtil.map(productResquest, Product.class);
 
         List<Image> lstImg = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -76,27 +72,27 @@ public class ProductServiceImpl implements ProductService {
 //        product.setShop(productDto.getShop());
 
         // convert entity to dto
-        return MapperUtil.map(product, ProductDto.class);
+        return MapperUtil.map(product, ProductRequest.class);
 
     }
     @Override
-    public ProductDto updateProduct(ProductDto productDto, long id, MultipartFile[] files) {
+    public ProductRequest updateProduct(ProductRequest productRequest, long id, MultipartFile[] files) {
         Product product = MapperUtil.map(productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id)), Product.class);
         imageRepository.deleteImagesByProduct(product.getId());
 
-        return save(productDto, files);
+        return save(productRequest, files);
     }
     @Override
-    public ProductResponse getAllProduct(int pageNo, int pageSize){
+    public com.example.vmo1.model.response.ProductResponse getAllProduct(CustomUserDetails customUserDetails, int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAllByShopId(pageable, customUserDetails.getId());
 
         List<Product> productList = products.getContent();
-        List<ProductDto> content = productList.stream().map(product -> MapperUtil.map(product, ProductDto.class)).collect(Collectors.toList());
+        List<ProductRequest> content = productList.stream().map(product -> MapperUtil.map(product, ProductRequest.class)).collect(Collectors.toList());
 
-        ProductResponse productResponse = new ProductResponse();
+        com.example.vmo1.model.response.ProductResponse productResponse = new com.example.vmo1.model.response.ProductResponse();
         productResponse.setContent(content);
         productResponse.setPageNo(products.getNumber());
         productResponse.setPageSize(products.getSize());
@@ -124,7 +120,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public int countProductsByShopId(long shop_id) {
-
         return productRepository.countProductsByShopId(shop_id);
     }
 

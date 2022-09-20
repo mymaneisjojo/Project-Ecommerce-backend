@@ -31,11 +31,13 @@ public class ShopServiceImpl implements ShopService {
     @Value("${project.image}")
     private String path;
     @Override
-    public MessageResponse add(ShopDto shopDto, MultipartFile file) {
-        Shop shop = MapperUtil.map(shopDto, Shop.class);
+    public MessageResponse add(ShopDto metaData, MultipartFile file) {
+        Shop shop = MapperUtil.map(metaData, Shop.class);
+        // if metaDta = null
+        //
         boolean isAccountExist = shopRepository.findByAccountId(shop.getAccount().getId()).isPresent();
         if(isAccountExist){
-            return new MessageResponse("Account already use");
+            return new MessageResponse(400, "Account already use");
         }
         try {
             String name = file.getOriginalFilename();
@@ -58,7 +60,7 @@ public class ShopServiceImpl implements ShopService {
 
         shopRepository.save(shop);
 
-        return new MessageResponse("Create shop successfully");
+        return new MessageResponse(200, "Create shop successfully");
     }
 
     @Override

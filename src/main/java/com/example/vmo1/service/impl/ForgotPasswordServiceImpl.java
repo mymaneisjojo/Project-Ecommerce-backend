@@ -62,24 +62,24 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
             String link = "http://localhost:8082/api/v1/auth/forgot-password/confirm?token=" + token;
             emailSender.sendEmail(account.getEmail(), buildEmail(account.getUsername(), link));
-            return new MessageResponse("Success: Token send successfully!");
+            return new MessageResponse(200,"Success: Token send successfully!");
         } else {
-            return new MessageResponse("Fail: Email is not found");
+            return new MessageResponse(404, "Fail: Email is not found");
         }
     }
     @Override
     public MessageResponse changePassword(PasswordResetRequest request){
         PasswordResetToken token = passwordResetTokenServiceImpl.getValidToken(request);
         if(StringUtils.isEmpty(request.getEmail())){
-            return new MessageResponse("A new password is required");
+            return new MessageResponse(400,"A new password is required");
         }
         if(request.getToken().equals(token.getToken())){
             updatePassword(request.getEmail(), request.getPassword());
             passwordResetTokenServiceImpl.deleteToken(request);
 
-            return new MessageResponse("Change password successfully!!");
+            return new MessageResponse(200,"Change password successfully!!");
         }
-        return new MessageResponse("Change password fail!!");
+        return new MessageResponse(400, "Change password fail!!");
     }
     @Override
     public boolean updatePassword(String email, String password){

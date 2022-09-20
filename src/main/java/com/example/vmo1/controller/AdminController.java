@@ -6,9 +6,11 @@ import com.example.vmo1.model.request.UpdateAccountByAdminRequest;
 import com.example.vmo1.model.response.AccountInforResponse;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ShopResponse;
+import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.service.ProductService;
 import com.example.vmo1.service.ShopService;
+import com.example.vmo1.validation.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,6 @@ public class AdminController {
     private AccountService accountService;
     @Autowired
     private ShopService shopService;
-
     @Autowired
     private ProductService productService;
 
@@ -47,7 +48,7 @@ public class AdminController {
     }
 
     @PutMapping("/account/update/{id}")
-    public ResponseEntity<?> updateAccountByAdmin(@RequestBody UpdateAccountByAdminRequest request,@PathVariable("id") long id){
+    public ResponseEntity<?> updateAccountByAdmin(@RequestBody UpdateAccountByAdminRequest request, @PathVariable("id") long id){
         AccountInforResponse accountResponse = accountService.updateAccountByAdmin(request, id);
         return ResponseEntity.ok(accountResponse);
     }
@@ -55,6 +56,8 @@ public class AdminController {
     @DeleteMapping("/account/delete/{id}")
     public ResponseEntity<?> deleteAccountByAdmin(@PathVariable("id") long id){
         accountService.deleteAccountByAdmin(id);
-        return ResponseEntity.ok(new MessageResponse("Account have been delete!!!"));
+        return ResponseEntity.ok(new MessageResponse(200,"Account have been delete!!!"));
     }
+
+
 }

@@ -48,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
         if(emailExists || usernameExists){
-            return new MessageResponse("Fail: username or email already use");
+            return new MessageResponse(400, "Fail: username or email already use");
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         boolean isValidUserName = userNameValidator.test(request.getUsername());
@@ -56,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
             if (!StringUtils.isEmpty(request.getPhone())) {
                 boolean isValidPhone = phoneValidator.test(request.getPhone());
                 if (!isValidPhone) {
-                    return new MessageResponse("Phone number is not valid");
+                    return new MessageResponse(400, "Phone number is not valid");
                 }
             }
             accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -67,9 +67,9 @@ public class AccountServiceImpl implements AccountService {
             accountRegister.setRoles(roles);
 
             accountRepository.save(accountRegister);
-            return new MessageResponse("Success: Register successfully!");
+            return new MessageResponse(200,"Success: Register successfully!");
         } else {
-            return new MessageResponse("Fail: Email or username is not valid");
+            return new MessageResponse(400, "Fail: Email or username is not valid");
         }
     }
     @Override
@@ -77,15 +77,21 @@ public class AccountServiceImpl implements AccountService {
         Account currentAccount = accountRepository.findByEmail(customUserDetails.getEmail()).get();
 
         if(!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), currentAccount.getPassword())){
-            return new MessageResponse("No matching account found");
+            return new MessageResponse(404,"No matching account found");
         }
         if(updatePasswordRequest.getOldPassword().equals(updatePasswordRequest.getNewPassword())){
-            return new MessageResponse("New password must different old password");
+            return new MessageResponse(400, "New password must different old password");
         }
         String newPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
         currentAccount.setPassword(newPassword);
         accountRepository.save(currentAccount);
-        return new MessageResponse("Update password successfully");
+        return new MessageResponse(200, "Update password successfully");
+    }
+
+    @Override
+    public AccountDto getAccountById(CustomUserDetails customUserDetails) {
+        Account account = accountRepository.findById(customUserDetails.getId()).orElse(null);
+        return MapperUtil.map(account, AccountDto.class);
     }
 
     @Override

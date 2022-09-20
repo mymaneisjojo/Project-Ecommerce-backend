@@ -48,7 +48,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
         if (emailExists || usernameExists) {
-            return new MessageResponse("Fail: username or email already use");
+            return new MessageResponse(400, "Fail: username or email already use");
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         boolean isValidUserName = userNameValidator.test(request.getUsername());
@@ -57,7 +57,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (request.getPhone() != null) {
                 boolean isValidPhone = phoneValidator.test(request.getPhone());
                 if (!isValidPhone) {
-                    return new MessageResponse("Phone number is not valid");
+                    return new MessageResponse(400, "Phone number is not valid");
                 } else {
                     accountRegister.setPhone(request.getPhone());
                 }
@@ -81,7 +81,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             String link = "http://localhost:8082/api/v1/auth/registration/confirm?token=" + tokenForNewAccount;
             emailSender.sendEmail(request.getEmail(), buildEmail(request.getUsername(), link));
 
-            return new MessageResponse("Success: Token send successfully!");
+            return new MessageResponse(200, "Success: Token send successfully!");
 
         } else {
             throw new IllegalStateException(String.format("Email %s or Username %s not valid", request.getEmail(), request.getUsername()));

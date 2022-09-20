@@ -12,15 +12,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductRequest {
     @Id
     private long id;
-    @NotNull
+    @NotNull(message = "Name is required")
     private String name;
-    @NotNull
+    @NotNull(message = "Price is required")
     private float price;
-    @NotNull
+    @NotNull(message = "Quantity is required")
     private int quantity;
+    private Boolean is_deleted;
     private Category category;
     private List<ImageDto> lstImg;
     private Shop shop;

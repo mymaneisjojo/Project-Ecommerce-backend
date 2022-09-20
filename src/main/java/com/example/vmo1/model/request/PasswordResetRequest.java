@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PasswordResetRequest {
-    @NotNull
+    @NotNull(message = "Email is required")
     private String email;
-    @NotNull
+    @NotNull(message = "Password is required")
     private String password;
-    @NotNull
+    @NotNull(message = "Confirm password is required")
     private String confirmPassword;
-    @NotNull
+    @NotNull(message = "Token is required")
     private String token;
 }

@@ -13,6 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordResetLinkRequest {
-    @NotNull
+    @NotNull(message = "Email is required")
     private String email;
 }

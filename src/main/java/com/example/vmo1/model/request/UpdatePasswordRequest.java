@@ -7,8 +7,8 @@ import java.util.Date;
 
 @Data
 public class UpdatePasswordRequest {
-    @NotNull
+    @NotNull(message = "Old password is confirm")
     private String oldPassword;
-    @NotNull
+    @NotNull(message = "New password is confirm")
     private String newPassword;
 }

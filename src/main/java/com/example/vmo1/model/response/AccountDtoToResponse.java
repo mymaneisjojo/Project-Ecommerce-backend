@@ -1,20 +1,15 @@
-package com.example.vmo1.model.request;
+package com.example.vmo1.model.response;
 
-import com.example.vmo1.model.entity.Role;
-import com.example.vmo1.model.entity.Shop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDto {
+public class AccountDtoToResponse {
     @Id
     private Long id;
     private String username;
@@ -24,5 +19,4 @@ public class AccountDto {
     private Boolean enable;
     private Date created_at;
     private Date updated_at;
-    private List<RoleDto> roles;
 }

@@ -12,15 +12,14 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 public class SignupRequest {
-    @NotNull
+    @NotNull(message = "Username is required")
     private  String username;
     private String fullname;
-    @NotNull
+    @NotNull(message = "Email is required")
     private  String email;
     @ValidPassword
     @NotNull
     private  String password;
     private String phone;
     private Set<Role> role;
-//    private Date created_at;
 }

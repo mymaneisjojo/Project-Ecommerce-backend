@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
-
+    @NotNull(message = "Username or email is required")
     private String usernameOrEmail;
-
+    @NotNull(message = "Password is required")
     private String password;
 }

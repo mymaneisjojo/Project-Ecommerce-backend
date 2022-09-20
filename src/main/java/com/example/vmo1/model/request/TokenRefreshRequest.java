@@ -6,6 +6,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class TokenRefreshRequest {
-    @NotNull
-    private String refeshToken;
+    @NotNull(message = "Refresh token is required")
+    private String refreshToken;
 }

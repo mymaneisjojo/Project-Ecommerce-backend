@@ -9,10 +9,7 @@ import com.example.vmo1.validation.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,5 +28,10 @@ public class UserController {
     @PutMapping("/password-update")
     public ResponseEntity<?> updateAccountPassword(@CurrentUser CustomUserDetails customUserDetails,@Valid @RequestBody UpdatePasswordRequest updatePasswordRequest){
         return ResponseEntity.ok(accountService.updatePassword(customUserDetails, updatePasswordRequest));
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<?> getAccountById(@CurrentUser CustomUserDetails customUserDetails){
+        return ResponseEntity.ok(accountService.getAccountById(customUserDetails));
     }
 }

@@ -1,6 +1,6 @@
 package com.example.vmo1.model.response;
 
-import com.example.vmo1.model.request.ProductDto;
+import com.example.vmo1.model.request.ProductRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductResponse {
-    private List<ProductDto> content;
+    private List<ProductRequest> content;
     private int pageNo;
     private int pageSize;
     private long totalElements;

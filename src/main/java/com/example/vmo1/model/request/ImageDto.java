@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ImageDto {
     private Long id;
-    @ValidFile
     private String name;
 }

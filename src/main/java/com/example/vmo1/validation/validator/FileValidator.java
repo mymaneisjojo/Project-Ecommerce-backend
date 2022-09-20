@@ -16,13 +16,10 @@ public class FileValidator implements ConstraintValidator<ValidFile, MultipartFi
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
         String contentType = multipartFile.getContentType();
-        if(!isSupportContentType(contentType)){
-            return false;
-        }
-        return true;
+        return isSupportedContentType(contentType);
     }
 
-    private boolean isSupportContentType(String contentType){
+    private boolean isSupportedContentType(String contentType) {
         return contentType.equals("text/xml")
                 || contentType.equals("application/pdf")
                 || contentType.equals("image/png")
