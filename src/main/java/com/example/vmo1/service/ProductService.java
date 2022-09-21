@@ -13,5 +13,4 @@ public interface ProductService {
     Product findById(long id);
     void deleteProduct(long id);
 
-    int countProductsByShopId(long shop_id);
 }

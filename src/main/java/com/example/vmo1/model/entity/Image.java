@@ -2,7 +2,9 @@ package com.example.vmo1.model.entity;
 
 import com.example.vmo1.validation.annotation.ValidFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -14,13 +16,19 @@ import java.util.Date;
 @Entity
 @Table(name = "image")
 @Data
+@NoArgsConstructor
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "fileName")
     private String fileName;
+
+    @Column(name = "fileType")
+    private String fileType;
+
+    private String fileDownloadUri;
 
     @ManyToOne
     @JsonIgnore

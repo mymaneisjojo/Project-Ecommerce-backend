@@ -42,9 +42,14 @@ public class AdminController {
         return shopService.getAllShop(pageNo, pageSize);
     }
 
-    @GetMapping("/shop/count/{shop_id}")
-    public ResponseEntity<?> countProductsByShopId(@PathVariable long shop_id){
-        return ResponseEntity.ok(productService.countProductsByShopId(shop_id));
+//    @GetMapping("/shop/count/{shop_id}")
+//    public ResponseEntity<?> countProductsByShopId(@PathVariable long shop_id){
+////        return ResponseEntity.ok(productService.countProductsByShopId(shop_id));
+//    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> count(){
+        return ResponseEntity.ok(shopService.statistProduct());
     }
 
     @PutMapping("/account/update/{id}")

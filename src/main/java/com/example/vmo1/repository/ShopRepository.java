@@ -13,4 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ShopRepository extends JpaRepository<Shop, Long> {
     Optional<Shop> findByAccountId(long account_id);
+    @Transactional
+    @Query(value = "SELECT COUNT(s.id) FROM Shop s")
+    int countShops();
 }

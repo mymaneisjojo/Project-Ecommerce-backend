@@ -4,10 +4,14 @@ import com.example.vmo1.commons.configs.MapperUtil;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Shop;
 import com.example.vmo1.model.request.ShopDto;
+import com.example.vmo1.model.response.CountProduct;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ShopResponse;
+import com.example.vmo1.model.response.StatisticResponse;
+import com.example.vmo1.repository.ProductRepository;
 import com.example.vmo1.repository.ShopRepository;
 import com.example.vmo1.service.ShopService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +32,9 @@ import java.util.stream.Collectors;
 public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopRepository shopRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Value("${project.image}")
     private String path;
@@ -85,6 +93,26 @@ public class ShopServiceImpl implements ShopService {
         shopResponse.setTotalPages(shops.getTotalPages());
         shopResponse.setLast(shops.isLast());
         return shopResponse;
+    }
+
+    @Override
+    public StatisticResponse statistProduct() {
+        int totalShop = shopRepository.countShops();
+        List<Shop> lstShop = shopRepository.findAll();
+        List<CountProduct> lstCountProduct = new ArrayList<>();
+        int totalProduct = 0;
+        for (Shop lst: lstShop) {
+            totalProduct =  productRepository.countProductsByShopId(lst.getId());
+            CountProduct countProduct = new CountProduct();
+            countProduct.setTotalProduct(totalProduct);
+            countProduct.setName(lst.getName());
+            lstCountProduct.add(countProduct);
+        }
+
+        StatisticResponse statisticResponse = new StatisticResponse();
+        statisticResponse.setTotalShop(totalShop);
+        statisticResponse.setLstTotalProduct(lstCountProduct);
+        return statisticResponse;
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.vmo1.controller;
 
 import com.example.vmo1.model.request.ProductRequest;
 import com.example.vmo1.model.response.MessageResponse;
+import com.example.vmo1.model.response.ProductResponse;
 import com.example.vmo1.repository.ImageRepository;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.ImageService;
@@ -26,9 +27,9 @@ import java.io.InputStream;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
     @Autowired
     ProductService productService;
     @Value("${project.image}")
@@ -36,8 +37,8 @@ public class ProductController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> uploadMultipleFiles(@ValidFile @RequestPart("files") MultipartFile[] files,@Valid @RequestPart ProductRequest productRequest) {
-        return ResponseEntity.ok(productService.save(productRequest, files));
+    public ResponseEntity<?> uploadMultipleFiles(@ValidFile @RequestPart("files") MultipartFile[] files,@Valid @RequestPart ProductRequest metaData) {
+        return ResponseEntity.ok(productService.save(metaData, files));
     }
 
     @GetMapping(value = "/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -48,15 +49,15 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@RequestPart ProductRequest productDto, @PathVariable(name= "id") long id, MultipartFile[] files){
-        ProductRequest productRequest = productService.updateProduct(productDto, id, files);
+    public ResponseEntity<?> updateProduct(@Valid @RequestPart ProductRequest metaData, @PathVariable(name= "id") long id, MultipartFile[] files){
+        ProductRequest productRequest = productService.updateProduct(metaData, id, files);
         return new ResponseEntity<>(productRequest, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public com.example.vmo1.model.response.ProductResponse getAllProducts(@CurrentUser CustomUserDetails customUserDetails, @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-                                                                          @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize){
-            return productService.getAllProduct(customUserDetails,pageNo, pageSize);
+    public ProductResponse getAllProducts(@CurrentUser CustomUserDetails customUserDetails, @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                                          @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize){
+            return productService.getAllProduct(customUserDetails, pageNo, pageSize);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -69,6 +70,7 @@ public class ProductController {
     public ResponseEntity<?> getProductById(@PathVariable long id){
         return ResponseEntity.ok(productService.findById(id));
     }
+
 
     //    @PostMapping("/upload")
 //    public ResponseEntity<UploadFileResponse> fileUpload(@RequestParam("file") MultipartFile file, @RequestBody Product product) {

@@ -19,7 +19,7 @@ import java.util.Date;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 20)
     private String name;
@@ -35,7 +35,7 @@ public class Role {
     @Column(name = "is_deleted")
     private Boolean is_deleted;
 
-    public Role(Integer id, String name, Boolean is_deleted) {
+    public Role(Long id, String name, Boolean is_deleted) {
         this.id = id;
         this.name = name;
         this.is_deleted = is_deleted;

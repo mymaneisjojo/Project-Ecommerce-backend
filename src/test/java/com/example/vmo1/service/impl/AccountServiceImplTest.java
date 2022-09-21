@@ -445,8 +445,7 @@ public class AccountServiceImplTest {
                 new AccountDto(0L, "username", "fullname", "nguyenhue11052001@gmail.com", "0372612247", false,
                         new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
                         new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), Arrays.asList(
-                        new Role(0, "name", new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false)))), 0, 1, 1, 1,
+                        new RoleDto(0L, "name", false))), 0, 1, 1, 1,
                 true);
 
         // Configure AccountRepository.findByRoles_name(...).
