@@ -1,13 +1,18 @@
 package com.example.vmo1.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.vmo1.model.entity.Image;
 import com.example.vmo1.repository.ImageRepository;
 import com.example.vmo1.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -20,13 +25,8 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.saveAll(image);
     }
 
-    @Override
-    public InputStream getResource(String path, String filename) throws FileNotFoundException {
-        String fullPath = path + File.separator + filename;
-        InputStream is = new FileInputStream(fullPath);
-        System.out.println(is);
-        return is;
-    }
+
+
 
 
 }

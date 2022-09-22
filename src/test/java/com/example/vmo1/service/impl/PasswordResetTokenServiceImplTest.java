@@ -46,7 +46,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -69,7 +69,7 @@ public class PasswordResetTokenServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -115,7 +115,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -159,7 +159,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());

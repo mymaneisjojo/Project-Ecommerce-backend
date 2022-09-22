@@ -27,62 +27,34 @@ import java.io.InputStream;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ImageRepository imageRepository;
-    @Autowired
-    ProductService productService;
-    @Value("${project.image}")
-    private String path;
+    private ProductService productService;
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> uploadMultipleFiles(@ValidFile @RequestPart("files") MultipartFile[] files,@Valid @RequestPart ProductRequest metaData) {
+    public ResponseEntity<?> uploadMultipleFiles(@ValidFile @RequestPart("files") MultipartFile[] files, @Valid @RequestPart ProductRequest metaData) {
         return ResponseEntity.ok(productService.save(metaData, files));
     }
 
-    @GetMapping(value = "/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
-        InputStream resource = this.imageService.getResource(path, imageName);
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        StreamUtils.copy(resource, response.getOutputStream());
-    }
-
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@Valid @RequestPart ProductRequest metaData, @PathVariable(name= "id") long id, MultipartFile[] files){
+    public ResponseEntity<?> updateProduct(@Valid @RequestPart ProductRequest metaData, @PathVariable(name = "id") long id, MultipartFile[] files) {
         ProductRequest productRequest = productService.updateProduct(metaData, id, files);
         return new ResponseEntity<>(productRequest, HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ProductResponse getAllProducts(@CurrentUser CustomUserDetails customUserDetails, @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-                                          @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize){
-            return productService.getAllProduct(customUserDetails, pageNo, pageSize);
+                                          @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize) {
+        return productService.getAllProduct(customUserDetails, pageNo, pageSize);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") long id){
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok(new MessageResponse(200,"Product have been delete!!!"));
+        return ResponseEntity.ok(new MessageResponse(200, "Product have been delete!!!"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable long id){
+    public ResponseEntity<?> getProductById(@PathVariable long id) {
         return ResponseEntity.ok(productService.findById(id));
     }
-
-
-    //    @PostMapping("/upload")
-//    public ResponseEntity<UploadFileResponse> fileUpload(@RequestParam("file") MultipartFile file, @RequestBody Product product) {
-//        String filename = null;
-//        try{
-//             filename = imageService.upload(file, path);
-//
-//
-//        } catch (IOException e){
-//            e.printStackTrace();
-//            return new ResponseEntity<>(new UploadFileResponse(null, "Image is not upload success"), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return new ResponseEntity<>(new UploadFileResponse(filename, "Image is success"), HttpStatus.OK);
-//    }
 }

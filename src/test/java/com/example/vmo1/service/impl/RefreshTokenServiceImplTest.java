@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RefeshTokenServiceImplTest {
+public class RefreshTokenServiceImplTest {
 
     @Mock
     private RefreshTokenRepository mockRefreshTokenRepository;
@@ -47,7 +46,7 @@ public class RefeshTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -69,7 +68,7 @@ public class RefeshTokenServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -113,7 +112,7 @@ public class RefeshTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -134,7 +133,7 @@ public class RefeshTokenServiceImplTest {
         account2.setIs_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -155,7 +154,7 @@ public class RefeshTokenServiceImplTest {
         account3.setIs_deleted(false);
         account3.setEnable(false);
         final Role role2 = new Role();
-        role2.setId(0);
+        role2.setId(0L);
         role2.setName("name");
         role2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -190,7 +189,7 @@ public class RefeshTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -212,7 +211,7 @@ public class RefeshTokenServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -247,7 +246,7 @@ public class RefeshTokenServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -266,7 +265,7 @@ public class RefeshTokenServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -300,7 +299,7 @@ public class RefeshTokenServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());

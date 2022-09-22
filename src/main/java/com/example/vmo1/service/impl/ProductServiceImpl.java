@@ -1,5 +1,7 @@
 package com.example.vmo1.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.vmo1.commons.configs.MapperUtil;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Image;
@@ -22,7 +24,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -35,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private Cloudinary cloudinary;
 
 
     @Value("${project.image}")
@@ -48,24 +55,13 @@ public class ProductServiceImpl implements ProductService {
         List<Image> lstImg = new ArrayList<>();
         for (MultipartFile file : files) {
             try {
-                String name = StringUtils.cleanPath(file.getOriginalFilename());
-
-                // random name generate file
-                String randomID = UUID.randomUUID().toString();
-                String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-                String filePath = path + File.separator + filename1;
-
-                File f = new File(path);
-                if (!f.exists()) {
-                    f.mkdir();
-                }
-                Files.copy(file.getInputStream(), Paths.get(filePath));
-                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/v1/product/"+path).path(filename1).toUriString();
+//                BufferedImage bi = ImageIO.read(file.getInputStream());
+                Map result = upload(file);
 
                 Image dbImage = new Image();
-                dbImage.setFileName(name);
+                dbImage.setFileName((String)result.get("original_filename"));
                 dbImage.setFileType(file.getContentType());
-                dbImage.setFileDownloadUri(fileDownloadUri);
+                dbImage.setImageUrl((String)result.get("url"));
                 dbImage.setProduct(productRequest);
                 lstImg.add(dbImage);
 
@@ -81,6 +77,16 @@ public class ProductServiceImpl implements ProductService {
         // convert entity to dto
         return MapperUtil.map(product, ProductRequest.class);
 
+    }
+
+    public Map upload(MultipartFile multipartFile) throws IOException {
+        File file = new File(multipartFile.getOriginalFilename());
+        FileOutputStream fo = new FileOutputStream(file);
+        fo.write(multipartFile.getBytes());
+        fo.close();
+        Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+
+        return result;
     }
     @Override
     public ProductRequest updateProduct(ProductRequest metaData, long id, MultipartFile[] files) {

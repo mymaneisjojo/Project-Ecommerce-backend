@@ -28,7 +28,7 @@ public class Image {
     @Column(name = "fileType")
     private String fileType;
 
-    private String fileDownloadUri;
+    private String imageUrl;
 
     @ManyToOne
     @JsonIgnore

@@ -58,7 +58,7 @@ public class ForgotPasswordServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -105,7 +105,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -126,7 +126,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setIs_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -141,7 +141,7 @@ public class ForgotPasswordServiceImplTest {
         final MessageResponse result = forgotPasswordServiceImplUnderTest.sendTokenToChangePassword(request);
         System.out.println("haha" + result);
         // Verify the results
-        assertEquals(new MessageResponse("Success: Token send successfully!"), result);
+        assertEquals(new MessageResponse(200, "Success: Token send successfully!"), result);
         verify(mockPasswordResetTokenRepository).save(
                 new PasswordResetToken( "token", LocalDateTime.of(2023, 1, 1, 0, 0, 0), true, account2));
         verify(mockEmailSender).sendEmail("to", "email");
@@ -157,7 +157,7 @@ public class ForgotPasswordServiceImplTest {
         final MessageResponse result = forgotPasswordServiceImplUnderTest.sendTokenToChangePassword(request);
 
         // Verify the results
-        assertEquals(new MessageResponse("Fail: Email is not found"), result);
+        assertEquals(new MessageResponse(404, "Fail: Email is not found"), result);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class ForgotPasswordServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -207,7 +207,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setIs_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -230,7 +230,7 @@ public class ForgotPasswordServiceImplTest {
         account3.setIs_deleted(false);
         account3.setEnable(false);
         final Role role2 = new Role();
-        role2.setId(0);
+        role2.setId(0L);
         role2.setName("name");
         role2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -267,7 +267,7 @@ public class ForgotPasswordServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -301,7 +301,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -324,7 +324,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setIs_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -364,7 +364,7 @@ public class ForgotPasswordServiceImplTest {
         account.setIs_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
-        role.setId(0);
+        role.setId(0L);
         role.setName("name");
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
@@ -383,7 +383,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setIs_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
-        role1.setId(0);
+        role1.setId(0L);
         role1.setName("name");
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
