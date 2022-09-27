@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @Table(name = "image")
 @Data
 @NoArgsConstructor
+@Where(clause = "is_deleted = false")
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +30,7 @@ public class Image {
     @Column(name = "fileType")
     private String fileType;
 
+    @Column(name = "imageUrl")
     private String imageUrl;
 
     @ManyToOne
@@ -42,5 +45,8 @@ public class Image {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updated_at;
+
+    @Column(name = "is_deleted")
+    private boolean is_deleted = false;
 
 }

@@ -26,7 +26,7 @@ public class PasswordResetToken {
     @Column
     private LocalDateTime confirmedAt;
     @Column
-    private Boolean active;
+    private boolean active;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -35,15 +35,19 @@ public class PasswordResetToken {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updated_at;
+
+    @Column(name = "is_deleted")
+    private boolean is_deleted = false;
     @ManyToOne
     @JoinColumn(nullable = false,
             name = "account_id")
     private Account account;
 
-    public PasswordResetToken(String token, LocalDateTime expiresAt, Boolean active, Account account) {
+    public PasswordResetToken(String token, LocalDateTime expiresAt, boolean active, Account account) {
         this.token = token;
         this.expiresAt = expiresAt;
         this.active = active;
         this.account = account;
     }
+
 }

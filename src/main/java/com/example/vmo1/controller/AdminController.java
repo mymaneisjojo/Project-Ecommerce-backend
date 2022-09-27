@@ -3,17 +3,17 @@ package com.example.vmo1.controller;
 
 import com.example.vmo1.model.request.SignupRequest;
 import com.example.vmo1.model.request.UpdateAccountByAdminRequest;
-import com.example.vmo1.model.response.AccountInforResponse;
+import com.example.vmo1.model.response.AccountDtoToResponse;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ShopResponse;
-import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.service.ProductService;
 import com.example.vmo1.service.ShopService;
-import com.example.vmo1.validation.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -26,7 +26,7 @@ public class AdminController {
     private ProductService productService;
 
     @PostMapping("/addAccount")
-    public ResponseEntity<?> addAccountByAdmin(@RequestBody SignupRequest request){
+    public ResponseEntity<?> addAccountByAdmin(@Valid @RequestBody SignupRequest request){
         return ResponseEntity.ok(accountService.addAccountByAdmin(request));
     }
 
@@ -42,19 +42,14 @@ public class AdminController {
         return shopService.getAllShop(pageNo, pageSize);
     }
 
-//    @GetMapping("/shop/count/{shop_id}")
-//    public ResponseEntity<?> countProductsByShopId(@PathVariable long shop_id){
-////        return ResponseEntity.ok(productService.countProductsByShopId(shop_id));
-//    }
-
     @GetMapping("/count")
     public ResponseEntity<?> count(){
         return ResponseEntity.ok(shopService.statistProduct());
     }
 
     @PutMapping("/account/update/{id}")
-    public ResponseEntity<?> updateAccountByAdmin(@RequestBody UpdateAccountByAdminRequest request, @PathVariable("id") long id){
-        AccountInforResponse accountResponse = accountService.updateAccountByAdmin(request, id);
+    public ResponseEntity<?> updateAccountByAdmin(@Valid@RequestBody UpdateAccountByAdminRequest request, @PathVariable("id") long id){
+        AccountDtoToResponse accountResponse = accountService.updateAccountByAdmin(request, id);
         return ResponseEntity.ok(accountResponse);
     }
 

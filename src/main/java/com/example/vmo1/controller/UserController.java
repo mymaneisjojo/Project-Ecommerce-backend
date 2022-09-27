@@ -2,7 +2,7 @@ package com.example.vmo1.controller;
 
 import com.example.vmo1.model.request.UpdateAccountRequest;
 import com.example.vmo1.model.request.UpdatePasswordRequest;
-import com.example.vmo1.model.response.AccountInforResponse;
+import com.example.vmo1.model.response.AccountDtoToResponse;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.validation.annotation.CurrentUser;
@@ -21,7 +21,7 @@ public class UserController {
 
     @PutMapping("/profile-update")
     public ResponseEntity<?> updateProfile(@CurrentUser CustomUserDetails customUserDetails, @RequestBody UpdateAccountRequest updateAccountRequest){
-        AccountInforResponse accountResponse = accountService.updateProfile(customUserDetails, updateAccountRequest);
+        AccountDtoToResponse accountResponse = accountService.updateProfile(customUserDetails, updateAccountRequest);
         return new ResponseEntity<>(accountResponse, HttpStatus.OK);
     }
 

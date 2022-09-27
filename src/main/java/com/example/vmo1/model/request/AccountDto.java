@@ -21,8 +21,16 @@ public class AccountDto {
     private String fullname;
     private String email;
     private String phone;
-    private Boolean enable;
+    private boolean enable;
     private Date created_at;
     private Date updated_at;
     private List<RoleDto> roles;
+
+    public AccountDto(Long id, String username, String email, boolean enable, List<RoleDto> roles) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.enable = enable;
+        this.roles = roles;
+    }
 }

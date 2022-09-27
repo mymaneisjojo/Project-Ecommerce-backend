@@ -16,5 +16,5 @@ public class UpdateAccountByAdminRequest {
     private String email;
     private String password;
     private String phone;
-    private Boolean enable;
+    private boolean enable;
 }

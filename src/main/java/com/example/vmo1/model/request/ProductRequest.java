@@ -21,7 +21,7 @@ public class ProductRequest {
     private float price;
     @NotNull(message = "Quantity is required")
     private int quantity;
-    private Boolean is_deleted;
+    private boolean is_deleted;
     private Category category;
     private List<ImageDto> lstImg;
     private Shop shop;

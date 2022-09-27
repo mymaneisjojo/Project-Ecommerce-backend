@@ -1,19 +1,20 @@
 package com.example.vmo1.model.response;
 
-import com.example.vmo1.model.entity.Account;
-import com.example.vmo1.model.request.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CountProduct {
+public class ShopDtoToResponse {
     private String name;
-    private String accountName;
-    private String accountEmail;
-    private  int totalProduct;
+    private String banner;
+    private String address;
+    private AccountDtoToResponse account;
+    private Date created_at;
+    private boolean is_deleted;
 }

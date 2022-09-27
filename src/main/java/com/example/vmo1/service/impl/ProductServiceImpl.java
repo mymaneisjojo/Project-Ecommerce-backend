@@ -3,6 +3,8 @@ package com.example.vmo1.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.vmo1.commons.configs.MapperUtil;
+import com.example.vmo1.commons.exceptions.BadRequestException;
+import com.example.vmo1.commons.exceptions.InvalidIdException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Image;
 import com.example.vmo1.model.entity.Product;
@@ -42,10 +44,6 @@ public class ProductServiceImpl implements ProductService {
     private ImageRepository imageRepository;
     @Autowired
     private Cloudinary cloudinary;
-
-
-    @Value("${project.image}")
-    private String path;
 
     @Override
     public ProductRequest save(ProductRequest metaData, MultipartFile[] files) {
@@ -125,9 +123,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(long id){
+        if(id <= 0){
+            throw new InvalidIdException("Id must bigger than 1", id);
+        }
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id));
-        product.setIs_deleted(true);
+        product.set_deleted(true);
         productRepository.save(product);
     }
 

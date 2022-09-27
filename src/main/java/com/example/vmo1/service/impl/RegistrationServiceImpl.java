@@ -1,6 +1,9 @@
 package com.example.vmo1.service.impl;
 
 
+import com.example.vmo1.commons.exceptions.BadRequestException;
+import com.example.vmo1.commons.exceptions.InvalidTokenRequestException;
+import com.example.vmo1.commons.exceptions.ResourceAlreadyInUseException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Account;
 import com.example.vmo1.model.entity.Role;
@@ -16,6 +19,7 @@ import com.example.vmo1.validation.validator.EmailValidator;
 import com.example.vmo1.validation.validator.PhoneValidator;
 import com.example.vmo1.validation.validator.UserNameValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +52,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
         if (emailExists || usernameExists) {
-            return new MessageResponse(400, "Fail: username or email already use");
+            throw new ResourceAlreadyInUseException("Account", "Email or username", request.getEmail() + " or " + request.getUsername());
+
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         boolean isValidUserName = userNameValidator.test(request.getUsername());
@@ -57,7 +62,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (request.getPhone() != null) {
                 boolean isValidPhone = phoneValidator.test(request.getPhone());
                 if (!isValidPhone) {
-                    return new MessageResponse(400, "Phone number is not valid");
+                    throw new BadRequestException("Phone is not valid", request.getPhone());
                 } else {
                     accountRegister.setPhone(request.getPhone());
                 }
@@ -84,7 +89,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             return new MessageResponse(200, "Success: Token send successfully!");
 
         } else {
-            throw new IllegalStateException(String.format("Email %s or Username %s not valid", request.getEmail(), request.getUsername()));
+            throw new BadRequestException("Username or email is not valid", request.getUsername() + " or " + request.getEmail());
+
         }
     }
 
@@ -99,7 +105,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         LocalDateTime expiresAt = confirmToken.getExpiresAt();
 
         if (expiresAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("Token is already expired!");
+            throw new InvalidTokenRequestException("Token",token,  "Token is already expired!");
         }
 
         confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());

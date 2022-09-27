@@ -14,12 +14,17 @@ import java.util.Set;
 public class SignupRequest {
     @NotNull(message = "Username is required")
     private  String username;
+
     private String fullname;
+
     @NotNull(message = "Email is required")
     private  String email;
+
     @ValidPassword
     @NotNull
     private  String password;
+
     private String phone;
+
     private Set<Role> role;
 }

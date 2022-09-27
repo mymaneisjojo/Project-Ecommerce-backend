@@ -33,9 +33,9 @@ public class Role {
     private Date updated_at;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private boolean is_deleted;
 
-    public Role(Long id, String name, Boolean is_deleted) {
+    public Role(Long id, String name, boolean is_deleted) {
         this.id = id;
         this.name = name;
         this.is_deleted = is_deleted;

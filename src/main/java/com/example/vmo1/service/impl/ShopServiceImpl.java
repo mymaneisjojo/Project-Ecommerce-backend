@@ -1,13 +1,13 @@
 package com.example.vmo1.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.vmo1.commons.configs.MapperUtil;
+import com.example.vmo1.commons.exceptions.ResourceAlreadyInUseException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Shop;
 import com.example.vmo1.model.request.ShopDto;
-import com.example.vmo1.model.response.CountProduct;
-import com.example.vmo1.model.response.MessageResponse;
-import com.example.vmo1.model.response.ShopResponse;
-import com.example.vmo1.model.response.StatisticResponse;
+import com.example.vmo1.model.response.*;
 import com.example.vmo1.repository.ProductRepository;
 import com.example.vmo1.repository.ShopRepository;
 import com.example.vmo1.service.ShopService;
@@ -21,10 +21,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,47 +35,39 @@ import java.util.stream.Collectors;
 public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopRepository shopRepository;
-
+    @Autowired
+    private Cloudinary cloudinary;
     @Autowired
     private ProductRepository productRepository;
-
-    @Value("${project.image}")
-    private String path;
     @Override
-    public MessageResponse add(ShopDto metaData, MultipartFile file) {
+    public ShopDtoToResponse add(ShopDto metaData, MultipartFile file) throws IOException {
         Shop shop = MapperUtil.map(metaData, Shop.class);
         // if metaDta = null
         //
         boolean isAccountExist = shopRepository.findByAccountId(shop.getAccount().getId()).isPresent();
         if(isAccountExist){
-            return new MessageResponse(400, "Account already use");
+            throw new ResourceAlreadyInUseException("Account","name", shop.getAccount().getUsername());
         }
-        try {
-            String name = file.getOriginalFilename();
-            // random name generate file
-            String randomID = UUID.randomUUID().toString();
-            String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-            String filePath = path + File.separator + filename1;
-
-            File f = new File(path);
-            if (!f.exists()) {
-                f.mkdir();
-            }
-            Files.copy(file.getInputStream(), Paths.get(filePath));
+        Map result = upload(file);
             // save image to field banner in shop
-            shop.setBanner(name);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        shop.setBanner((String)result.get("url"));
+         shopRepository.save(shop);
 
-        shopRepository.save(shop);
+        return MapperUtil.map(shop, ShopDtoToResponse.class);
+    }
 
-        return new MessageResponse(200, "Create shop successfully");
+    public Map upload(MultipartFile multipartFile) throws IOException {
+        File file = new File(multipartFile.getOriginalFilename());
+        FileOutputStream fo = new FileOutputStream(file);
+        fo.write(multipartFile.getBytes());
+        fo.close();
+        Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+
+        return result;
     }
 
     @Override
-    public ShopDto update(ShopDto shopDto, long id, MultipartFile file) {
+    public ShopDto update(ShopDto metaData, long id, MultipartFile file) {
         Shop shop = MapperUtil.map(shopRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Find shop by id", "Shop", id)), Shop.class);
 
@@ -106,6 +101,8 @@ public class ShopServiceImpl implements ShopService {
             CountProduct countProduct = new CountProduct();
             countProduct.setTotalProduct(totalProduct);
             countProduct.setName(lst.getName());
+            countProduct.setAccountName(lst.getAccount().getUsername());
+            countProduct.setAccountEmail(lst.getAccount().getEmail());
             lstCountProduct.add(countProduct);
         }
 

@@ -15,7 +15,7 @@ public class ProductDtoToResponse {
     private String name;
     private float price;
     private int quantity;
-    private Boolean is_deleted;
+    private boolean is_deleted;
     private Category category;
     private List<ImageDto> lstImg;
     private List<Color> colors;

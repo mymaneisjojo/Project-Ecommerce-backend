@@ -2,17 +2,13 @@ package com.example.vmo1.controller;
 
 import com.example.vmo1.model.entity.RefreshToken;
 import com.example.vmo1.model.request.*;
-import com.example.vmo1.model.response.AccountInforResponse;
 import com.example.vmo1.model.response.JWTAuthResponse;
 import com.example.vmo1.security.jwt.JwtTokenProvider;
 import com.example.vmo1.security.service.CustomUserDetails;
-import com.example.vmo1.service.AccountService;
 import com.example.vmo1.service.ForgotPasswordService;
 import com.example.vmo1.service.RefeshTokenService;
 import com.example.vmo1.service.RegistrationService;
-import com.example.vmo1.validation.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

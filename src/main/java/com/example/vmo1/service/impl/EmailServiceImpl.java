@@ -1,5 +1,6 @@
 package com.example.vmo1.service.impl;
 
+import com.example.vmo1.commons.exceptions.MailSendException;
 import com.example.vmo1.service.EmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class EmailServiceImpl implements EmailSender {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             logger.error("Failed to send email for: " + email + "\n" + e);
-            throw new IllegalArgumentException("Failed to send email for: " + email);
+            throw new MailSendException("email", email);
         }
     }
 }

@@ -17,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Where(clause = "is_deleted = 0")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +40,7 @@ public class Product {
     private Date updated_at;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private boolean is_deleted = false;
 
     @OneToMany(mappedBy = "product", cascade= {CascadeType.ALL})
     private List<Image> lstImg;

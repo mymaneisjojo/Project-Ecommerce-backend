@@ -43,7 +43,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -54,7 +54,7 @@ public class PasswordResetTokenServiceImplTest {
         final PasswordResetToken expectedResult = new PasswordResetToken(0L, "token",
                 LocalDateTime.now().plusMinutes(15), LocalDateTime.now(), false,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account);
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),false, account);
 
         // Configure PasswordResetTokenRepository.findByToken(...).
         final Account account1 = new Account();
@@ -66,7 +66,7 @@ public class PasswordResetTokenServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -78,7 +78,7 @@ public class PasswordResetTokenServiceImplTest {
                 new PasswordResetToken(0L, "token", LocalDateTime.now().plusMinutes(15),
                         LocalDateTime.now(), false,
                         new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account1));
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),false, account1));
         when(mockPasswordResetTokenRepository.findByToken("token")).thenReturn(passwordResetToken);
 
         // Run the test
@@ -86,6 +86,7 @@ public class PasswordResetTokenServiceImplTest {
         System.out.println("haha" + result);
         // Verify the results
         assertEquals(expectedResult, result);
+
     }
 
     @Test
@@ -112,7 +113,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -123,16 +124,17 @@ public class PasswordResetTokenServiceImplTest {
         final PasswordResetToken request = new PasswordResetToken(0L, "token", LocalDateTime.now().plusMinutes(15),
                 LocalDateTime.now(), true,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account);
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),false,  account);
 
         // Run the test
         passwordResetTokenServiceImplUnderTest.verifyExpiration(request);
+
 
         // Verify the results
     }
 
     @Test
-    public void testInIsActiveToken() {
+    public void testDeleteToken() {
         // Setup
         final PasswordResetRequest request = new PasswordResetRequest("email", "password", "confirmPassword",
                 "fieldValue");
@@ -156,7 +158,7 @@ public class PasswordResetTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -167,10 +169,12 @@ public class PasswordResetTokenServiceImplTest {
         final PasswordResetToken token = new PasswordResetToken(0L, "token", LocalDateTime.of(2020, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account);
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account);
 
         // Run the test
         passwordResetTokenServiceImplUnderTest.matchEmail(token, "eee");
+
+
 
         // Verify the results
     }

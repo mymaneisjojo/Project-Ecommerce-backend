@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RefreshTokenServiceImplTest {
+public class RefeshTokenServiceImplTest {
 
     @Mock
     private RefreshTokenRepository mockRefreshTokenRepository;
@@ -43,7 +43,7 @@ public class RefreshTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -52,8 +52,8 @@ public class RefreshTokenServiceImplTest {
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setRoles(new HashSet<>(Arrays.asList(role)));
         final Optional<RefreshToken> expectedResult = Optional.of(
-                new RefreshToken(0L, account, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                        LocalDateTime.now()));
+                new RefreshToken(0L, account, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0)));
 
         // Configure RefreshTokenRepository.findByToken(...).
         final Account account1 = new Account();
@@ -65,7 +65,7 @@ public class RefreshTokenServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -74,8 +74,8 @@ public class RefreshTokenServiceImplTest {
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setRoles(new HashSet<>(Arrays.asList(role1)));
         final Optional<RefreshToken> refreshToken = Optional.of(
-                new RefreshToken(0L, account, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                        LocalDateTime.now()));
+                new RefreshToken(0L, account1, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0)));
         when(mockRefreshTokenRepository.findByToken("token")).thenReturn(refreshToken);
 
         // Run the test
@@ -109,7 +109,7 @@ public class RefreshTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -117,8 +117,8 @@ public class RefreshTokenServiceImplTest {
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setRoles(new HashSet<>(Arrays.asList(role)));
-        final RefreshToken expectedResult = new RefreshToken(0L, account, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now());
+        final RefreshToken expectedResult = new RefreshToken(0L, account, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0));
 
         // Configure AccountRepository.findById(...).
         final Account account2 = new Account();
@@ -130,7 +130,7 @@ public class RefreshTokenServiceImplTest {
         account2.setPhone("phone");
         account2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account2.setIs_deleted(false);
+        account2.set_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -151,7 +151,7 @@ public class RefreshTokenServiceImplTest {
         account3.setPhone("phone");
         account3.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account3.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account3.setIs_deleted(false);
+        account3.set_deleted(false);
         account3.setEnable(false);
         final Role role2 = new Role();
         role2.setId(0L);
@@ -159,19 +159,19 @@ public class RefreshTokenServiceImplTest {
         role2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account3.setRoles(new HashSet<>(Arrays.asList(role2)));
-        final RefreshToken refreshToken = new RefreshToken(0L, account3, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now());
-        when(mockRefreshTokenRepository.save(new RefreshToken(0L, new Account(), "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now()))).thenReturn(refreshToken);
+        final RefreshToken refreshToken = new RefreshToken(0L, account3, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0));
+        when(mockRefreshTokenRepository.save(new RefreshToken(0L, new Account(), "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0)))).thenReturn(refreshToken);
 
         // Run the test
         final RefreshToken result = refeshTokenServiceImplUnderTest.createRefreshToken(0L);
-        System.out.println(result);
+
         // Verify the results
         assertEquals(expectedResult, result);
         verify(mockRefreshTokenRepository).save(
-                new RefreshToken(0L, new Account(), "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                        LocalDateTime.now()));
+                new RefreshToken(0L, new Account(), "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0)));
     }
 
     @Test
@@ -186,7 +186,7 @@ public class RefreshTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -194,8 +194,8 @@ public class RefreshTokenServiceImplTest {
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setRoles(new HashSet<>(Arrays.asList(role)));
-        final RefreshToken expectedResult = new RefreshToken(0L, account, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now());
+        final RefreshToken expectedResult = new RefreshToken(0L, account, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0));
         when(mockAccountRepository.findById(0L)).thenReturn(Optional.empty());
 
         // Configure RefreshTokenRepository.save(...).
@@ -208,7 +208,7 @@ public class RefreshTokenServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -216,10 +216,10 @@ public class RefreshTokenServiceImplTest {
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setRoles(new HashSet<>(Arrays.asList(role1)));
-        final RefreshToken refreshToken = new RefreshToken(0L, account1, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now());
-        when(mockRefreshTokenRepository.save(new RefreshToken(0L, new Account(), "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                LocalDateTime.now()))).thenReturn(refreshToken);
+        final RefreshToken refreshToken = new RefreshToken(0L, account1, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0));
+        when(mockRefreshTokenRepository.save(new RefreshToken(0L, new Account(), "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0)))).thenReturn(refreshToken);
 
         // Run the test
         final RefreshToken result = refeshTokenServiceImplUnderTest.createRefreshToken(0L);
@@ -227,8 +227,8 @@ public class RefreshTokenServiceImplTest {
         // Verify the results
         assertEquals(expectedResult, result);
         verify(mockRefreshTokenRepository).save(
-                new RefreshToken(0L, new Account(), "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                        LocalDateTime.now()));
+                new RefreshToken(0L, new Account(), "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0)));
     }
 
     @Test
@@ -243,7 +243,7 @@ public class RefreshTokenServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -251,7 +251,7 @@ public class RefreshTokenServiceImplTest {
         role.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setRoles(new HashSet<>(Arrays.asList(role)));
-        final RefreshToken token = new RefreshToken(0L, account, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
+        final RefreshToken token = new RefreshToken(0L, account, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0));
         final Account account1 = new Account();
         account1.setId(0L);
@@ -262,7 +262,7 @@ public class RefreshTokenServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -270,7 +270,7 @@ public class RefreshTokenServiceImplTest {
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setRoles(new HashSet<>(Arrays.asList(role1)));
-        final RefreshToken expectedResult = new RefreshToken(0L, account1, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
+        final RefreshToken expectedResult = new RefreshToken(0L, account1, "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0));
 
         // Run the test
@@ -279,8 +279,8 @@ public class RefreshTokenServiceImplTest {
         // Verify the results
         assertEquals(expectedResult, result);
         verify(mockRefreshTokenRepository).delete(
-                new RefreshToken(0L, account1, "c8631d2c-7647-4857-a7b2-054dbe1b218d",
-                        LocalDateTime.now()));
+                new RefreshToken(0L, new Account(), "9a2fc81f-55ec-43cf-8fc0-a5bbb7ce5ce9",
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0)));
     }
 
     @Test
@@ -296,7 +296,7 @@ public class RefreshTokenServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
         role.setId(0L);

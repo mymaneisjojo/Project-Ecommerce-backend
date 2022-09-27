@@ -30,9 +30,12 @@ public class ConfirmationToken {
     private Date updated_at;
     @Column(nullable = false)
     private LocalDateTime expiresAt;
+
     @Column
     private LocalDateTime confirmedAt;
 
+    @Column(name = "is_deleted")
+    private boolean is_deleted = false;
     @ManyToOne
     @JoinColumn(nullable = false,
             name = "account_id")

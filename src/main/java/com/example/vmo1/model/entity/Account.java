@@ -23,7 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-
+@Where(clause = "is_deleted = 0")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,10 +54,10 @@ public class Account {
     private Date updated_at;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private boolean is_deleted = false;
 
     @Column(name = "enable")
-    private Boolean enable;
+    private boolean enable;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "shop")
 @Data
+@Where(clause = "is_deleted = 0")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +35,9 @@ public class Shop {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updated_at;
+
+    @Column(name = "is_deleted")
+    private boolean is_deleted = false;
 
     @OneToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
     @JsonIgnore

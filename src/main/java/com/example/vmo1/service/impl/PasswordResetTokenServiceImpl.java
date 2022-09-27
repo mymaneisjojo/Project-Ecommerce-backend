@@ -29,7 +29,7 @@ public class PasswordResetTokenServiceImpl implements PasswordReserTokenService 
             throw new InvalidTokenRequestException("Password Reset Token", request.getToken(),
                     "Expired token. Please issue a new request");
         }
-        if(!request.getActive()){
+        if(!request.isActive()){
             throw new InvalidTokenRequestException("Password Reset Token", request.getToken(),
                     "Token was marked inactive");
         }

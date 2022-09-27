@@ -2,11 +2,14 @@ package com.example.vmo1.service.impl;
 
 
 import com.example.vmo1.commons.configs.MapperUtil;
+import com.example.vmo1.commons.exceptions.BadRequestException;
+import com.example.vmo1.commons.exceptions.InvalidIdException;
+import com.example.vmo1.commons.exceptions.ResourceAlreadyInUseException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Account;
 import com.example.vmo1.model.entity.Role;
 import com.example.vmo1.model.request.*;
-import com.example.vmo1.model.response.AccountInforResponse;
+import com.example.vmo1.model.response.AccountDtoToResponse;
 import com.example.vmo1.model.response.AccountResponse;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.repository.AccountRepository;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,12 +47,12 @@ public class AccountServiceImpl implements AccountService {
     private RoleRepository roleRepository;
 
     @Override
-    public MessageResponse addAccountByAdmin(SignupRequest request) {
+    public AccountDtoToResponse addAccountByAdmin(SignupRequest request) {
         Account accountRegister = MapperUtil.map(request, Account.class);
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
         if(emailExists || usernameExists){
-            return new MessageResponse(400, "Fail: username or email already use");
+            throw new ResourceAlreadyInUseException("Account", "Email or username", request.getEmail() + " or " + request.getUsername());
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         boolean isValidUserName = userNameValidator.test(request.getUsername());
@@ -56,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
             if (!StringUtils.isEmpty(request.getPhone())) {
                 boolean isValidPhone = phoneValidator.test(request.getPhone());
                 if (!isValidPhone) {
-                    return new MessageResponse(400, "Phone number is not valid");
+                    throw new BadRequestException( "Phone is not valid", request.getPhone());
                 }
             }
             accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -67,9 +71,9 @@ public class AccountServiceImpl implements AccountService {
             accountRegister.setRoles(roles);
 
             accountRepository.save(accountRegister);
-            return new MessageResponse(200,"Success: Register successfully!");
+            return MapperUtil.map(accountRegister, AccountDtoToResponse.class);
         } else {
-            return new MessageResponse(400, "Fail: Email or username is not valid");
+            throw new BadRequestException("Username or email is not valid", request.getUsername() + " or " + request.getEmail());
         }
     }
     @Override
@@ -77,10 +81,10 @@ public class AccountServiceImpl implements AccountService {
         Account currentAccount = accountRepository.findByEmail(customUserDetails.getEmail()).get();
 
         if(!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), currentAccount.getPassword())){
-            return new MessageResponse(404,"No matching account found");
+            throw new BadRequestException("No matching account found", updatePasswordRequest.getOldPassword());
         }
         if(updatePasswordRequest.getOldPassword().equals(updatePasswordRequest.getNewPassword())){
-            return new MessageResponse(400, "New password must different old password");
+            throw new BadRequestException( "New password must different old password", updatePasswordRequest.getNewPassword());
         }
         String newPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
         currentAccount.setPassword(newPassword);
@@ -113,7 +117,7 @@ public class AccountServiceImpl implements AccountService {
         return accountResponse;
     }
     @Override
-    public AccountInforResponse updateProfile(CustomUserDetails customUserDetails, UpdateAccountRequest request){
+    public AccountDtoToResponse updateProfile(CustomUserDetails customUserDetails, UpdateAccountRequest request){
         Account account = accountRepository.findByEmail(customUserDetails.getEmail()).get();
 
         account.setFullname(request.getFullname());
@@ -121,20 +125,20 @@ public class AccountServiceImpl implements AccountService {
         if (!StringUtils.isEmpty(request.getPhone())) {
             boolean isValidPhone = phoneValidator.test(request.getPhone());
             if (!isValidPhone) {
-                throw new IllegalStateException("Phone number is not valid");
+                throw new BadRequestException("Phone is not valid: ", request.getPhone());
             } else {
                 account.setPhone(request.getPhone());
             }
         }
 
         accountRepository.save(account);
-        return MapperUtil.map(account, AccountInforResponse.class);
+        return MapperUtil.map(account, AccountDtoToResponse.class);
     }
 
     @Override
-    public AccountInforResponse updateAccountByAdmin(UpdateAccountByAdminRequest request, long id) {
+    public AccountDtoToResponse updateAccountByAdmin(UpdateAccountByAdminRequest request, long id) {
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Account", "Update account by id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "id", id));
 
         account.setPassword(passwordEncoder.encode(request.getPassword()));
         account.setFullname(request.getFullname());
@@ -143,21 +147,24 @@ public class AccountServiceImpl implements AccountService {
         if (!StringUtils.isEmpty(request.getPhone())) {
             boolean isValidPhone = phoneValidator.test(request.getPhone());
             if (!isValidPhone) {
-                throw new IllegalStateException("Phone number is not valid");
+                throw new BadRequestException("Phone is not valid: ", request.getPhone());
             } else {
                 account.setPhone(request.getPhone());
             }
         }
-        account.setEnable(request.getEnable());
+        account.setEnable(request.isEnable());
         accountRepository.save(account);
-        return MapperUtil.map(account, AccountInforResponse.class);
+        return MapperUtil.map(account, AccountDtoToResponse.class);
     }
 
     @Override
     public void deleteAccountByAdmin(long id) {
+        if(id <= 0){
+            throw new InvalidIdException("Id must bigger than 1", id);
+        }
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Account", "Delete account by admin", id));
-        account.setIs_deleted(true);
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "id", id));
+        account.set_deleted(true);
 
         accountRepository.save(account);
     }

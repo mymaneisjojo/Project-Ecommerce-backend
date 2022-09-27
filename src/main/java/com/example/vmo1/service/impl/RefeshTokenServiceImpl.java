@@ -47,6 +47,7 @@ public class RefeshTokenServiceImpl implements RefeshTokenService {
 
     @Override
     public int deleteByUserId(Long accountId) {
+
         return refreshTokenRepository.deleteByAccount(accountRepository.findById(accountId).get());
     }
 }

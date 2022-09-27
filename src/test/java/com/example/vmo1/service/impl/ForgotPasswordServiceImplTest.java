@@ -55,7 +55,7 @@ public class ForgotPasswordServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -66,7 +66,7 @@ public class ForgotPasswordServiceImplTest {
         final Optional<PasswordResetToken> passwordResetToken = Optional.of(
                 new PasswordResetToken(0L, "token", LocalDateTime.now().plusMinutes(15), null, false,
                         new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account));
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account));
         when(mockPasswordResetTokenRepository.findByToken("token")).thenReturn(passwordResetToken);
 
         // Run the test
@@ -91,6 +91,7 @@ public class ForgotPasswordServiceImplTest {
     public void testSendTokenToChangePassword() {
         // Setup
         final PasswordResetLinkRequest request = new PasswordResetLinkRequest("email");
+        final MessageResponse expectedResult = new MessageResponse(200, "Success: Token send successfully!");
 
         // Configure AccountRepository.findByEmail(...).
         final Account account1 = new Account();
@@ -102,7 +103,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -123,7 +124,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setPhone("phone");
         account2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account2.setIs_deleted(false);
+        account2.set_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -131,20 +132,28 @@ public class ForgotPasswordServiceImplTest {
         role1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         role1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account2.setRoles(new HashSet<>(Arrays.asList(role1)));
-        final PasswordResetToken passwordResetToken = new PasswordResetToken("token",
-                LocalDateTime.of(2023, 1, 1, 0, 0, 0),  true, account2);
+        final PasswordResetToken passwordResetToken = new PasswordResetToken(0L, "token",
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account2);
         when(mockPasswordResetTokenRepository.save(
-                new PasswordResetToken( "token", LocalDateTime.now().plusMinutes(15), true, account2)))
+                new PasswordResetToken(0L, "token", LocalDateTime.of(2020, 1, 1, 0, 0, 0),
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, new Account())))
                 .thenReturn(passwordResetToken);
 
         // Run the test
         final MessageResponse result = forgotPasswordServiceImplUnderTest.sendTokenToChangePassword(request);
-        System.out.println("haha" + result);
+
         // Verify the results
-        assertEquals(new MessageResponse(200, "Success: Token send successfully!"), result);
+        assertEquals(expectedResult, result);
         verify(mockPasswordResetTokenRepository).save(
-                new PasswordResetToken( "token", LocalDateTime.of(2023, 1, 1, 0, 0, 0), true, account2));
-        verify(mockEmailSender).sendEmail("to", "email");
+                new PasswordResetToken(0L, "token", LocalDateTime.of(2020, 1, 1, 0, 0, 0),
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, new Account()));
+        verify(mockEmailSender).sendEmail("email", "eee");
     }
 
     @Test
@@ -154,20 +163,15 @@ public class ForgotPasswordServiceImplTest {
         when(mockAccountRepository.findByEmail("email")).thenReturn(Optional.empty());
 
         // Run the test
-        final MessageResponse result = forgotPasswordServiceImplUnderTest.sendTokenToChangePassword(request);
-
-        // Verify the results
-        assertEquals(new MessageResponse(404, "Fail: Email is not found"), result);
+        assertThrows(ResourceNotFoundException.class,
+                () -> forgotPasswordServiceImplUnderTest.sendTokenToChangePassword(request));
     }
 
     @Test
     public void testChangePassword() {
         // Setup
-        final PasswordResetRequest request = new PasswordResetRequest();
-        request.setEmail("email");
-        request.setPassword("password");
-        request.setConfirmPassword("confirmPassword");
-        request.setToken("token");
+        final PasswordResetRequest request = new PasswordResetRequest("email", "password", "confirmPassword", "token");
+        final MessageResponse expectedResult = new MessageResponse(0, "Change password fail!!");
 
         // Configure PasswordResetTokenServiceImpl.getValidToken(...).
         final Account account = new Account();
@@ -179,7 +183,7 @@ public class ForgotPasswordServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -190,8 +194,9 @@ public class ForgotPasswordServiceImplTest {
         final PasswordResetToken passwordResetToken = new PasswordResetToken(0L, "token",
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account);
-        when(mockPasswordResetTokenServiceImpl.getValidToken(request))
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account);
+        when(mockPasswordResetTokenServiceImpl.getValidToken(
+                new PasswordResetRequest("email", "password", "confirmPassword", "token")))
                 .thenReturn(passwordResetToken);
 
         // Configure AccountRepository.findByEmail(...).
@@ -204,7 +209,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setPhone("phone");
         account2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account2.setIs_deleted(false);
+        account2.set_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -227,7 +232,7 @@ public class ForgotPasswordServiceImplTest {
         account3.setPhone("phone");
         account3.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account3.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account3.setIs_deleted(false);
+        account3.set_deleted(false);
         account3.setEnable(false);
         final Role role2 = new Role();
         role2.setId(0L);
@@ -241,18 +246,16 @@ public class ForgotPasswordServiceImplTest {
         final MessageResponse result = forgotPasswordServiceImplUnderTest.changePassword(request);
 
         // Verify the results
+        assertEquals(expectedResult, result);
         verify(mockAccountRepository).save(any(Account.class));
-        verify(mockPasswordResetTokenServiceImpl).deleteToken(new PasswordResetRequest("email", "password", "confirmPassword", "token"));
+        verify(mockPasswordResetTokenServiceImpl).deleteToken(
+                new PasswordResetRequest("email", "password", "confirmPassword", "token"));
     }
 
     @Test
     public void testChangePassword_AccountRepositoryFindByEmailReturnsAbsent() {
         // Setup
-        final PasswordResetRequest request = new PasswordResetRequest();
-        request.setEmail("email");
-        request.setPassword("password");
-        request.setConfirmPassword("confirmPassword");
-        request.setToken("token");
+        final PasswordResetRequest request = new PasswordResetRequest("email", "password", "confirmPassword", "token");
 
         // Configure PasswordResetTokenServiceImpl.getValidToken(...).
         final Account account = new Account();
@@ -264,7 +267,7 @@ public class ForgotPasswordServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -275,8 +278,9 @@ public class ForgotPasswordServiceImplTest {
         final PasswordResetToken passwordResetToken = new PasswordResetToken(0L, "token",
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account);
-        when(mockPasswordResetTokenServiceImpl.getValidToken(request))
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account);
+        when(mockPasswordResetTokenServiceImpl.getValidToken(
+                new PasswordResetRequest("email", "password", "confirmPassword", "token")))
                 .thenReturn(passwordResetToken);
 
         when(mockAccountRepository.findByEmail("email")).thenReturn(Optional.empty());
@@ -298,7 +302,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -321,7 +325,7 @@ public class ForgotPasswordServiceImplTest {
         account2.setPhone("phone");
         account2.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account2.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account2.setIs_deleted(false);
+        account2.set_deleted(false);
         account2.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -335,7 +339,7 @@ public class ForgotPasswordServiceImplTest {
         final boolean result = forgotPasswordServiceImplUnderTest.updatePassword("email", "password");
 
         // Verify the results
-        assertTrue(result);
+        assertFalse(result);
         verify(mockAccountRepository).save(any(Account.class));
     }
 
@@ -361,7 +365,7 @@ public class ForgotPasswordServiceImplTest {
         account.setPhone("phone");
         account.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account.setIs_deleted(false);
+        account.set_deleted(false);
         account.setEnable(false);
         final Role role = new Role();
         role.setId(0L);
@@ -380,7 +384,7 @@ public class ForgotPasswordServiceImplTest {
         account1.setPhone("phone");
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         account1.setUpdated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        account1.setIs_deleted(false);
+        account1.set_deleted(false);
         account1.setEnable(false);
         final Role role1 = new Role();
         role1.setId(0L);
@@ -391,12 +395,12 @@ public class ForgotPasswordServiceImplTest {
         final PasswordResetToken passwordResetToken = new PasswordResetToken(0L, "token",
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
                 new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), account1);
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, account1);
         when(mockPasswordResetTokenRepository.save(
                 new PasswordResetToken(0L, "token", LocalDateTime.of(2020, 1, 1, 0, 0, 0),
                         LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
                         new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), new Account())))
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, new Account())))
                 .thenReturn(passwordResetToken);
 
         // Run the test
@@ -404,102 +408,14 @@ public class ForgotPasswordServiceImplTest {
 
         // Verify the results
         verify(mockPasswordResetTokenRepository).save(
-                new PasswordResetToken("token", LocalDateTime.now().plusMinutes(15), true ,account));
+                new PasswordResetToken(0L, "token", LocalDateTime.of(2020, 1, 1, 0, 0, 0),
+                        LocalDateTime.of(2020, 1, 1, 0, 0, 0), false,
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+                        new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(), false, new Account()));
     }
 
     @Test
     public void testBuildEmail() {
-        assertEquals("<div style=\"display: none; font-size: 1px; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;\">\n" +
-                "    &nbsp;\n" +
-                "</div>\n" +
-                "<table style=\"background: #F7F8FA; border: 0; border-radius: 0; width: 100%;\" cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "<tbody>\n" +
-                "<tr>\n" +
-                "    <td class=\"tw-body\" style=\"padding: 15px 15px 0;\" align=\"center\">\n" +
-                "        <table style=\"background: #F7F8FA; border: 0; border-radius: 0;\" cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "            <tbody>\n" +
-                "            <tr>\n" +
-                "                <td class=\"\" style=\"width: 600px;\" align=\"center\">\n" +
-                "                    <p style=\"padding: 5px 5px 5px; font-size: 13px; margin: 0 0 0px; color: #316fea;\" align=\"right\">\n" +
-                "                    </p>\n" +
-                "                    <table style=\"background: #ffffff; border: 0px; border-radius: 4px; width: 99.6672%; overflow: hidden;\"\n" +
-                "                           cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "                        <tbody>\n" +
-                "                        <tr>\n" +
-                "                            <td class=\"\" style=\"padding: 0px; width: 100%;\" align=\"center\">\n" +
-                "                                <table style=\"background: #336f85; border: 0px; border-radius: 0px; width: 599px; height: 53px; margin-left: auto; margin-right: auto;\"\n" +
-                "                                       cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "                                    <tbody>\n" +
-                "                                    <tr>\n" +
-                "\n" +
-                "                                        <td class=\"tw-card-header\"\n" +
-                "                                            style=\"padding: 5px 5px px; width: 366px; color: #ffff; text-decoration: none; font-family: sans-serif;\"\n" +
-                "                                            align=\"center\"><span\n" +
-                "                                                style=\"font-weight: 600;\">Email Confirmation Required</span></td>\n" +
-                "\n" +
-                "                                    </tr>\n" +
-                "                                    </tbody>\n" +
-                "                                </table>\n" +
-                "                                <p><br/><br/></p>\n" +
-                "                                <table dir=\"ltr\" style=\"border: 0; width: 100%;\" cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "                                    <tbody>\n" +
-                "                                    <tr>\n" +
-                "                                        <td class=\"tw-card-body\"\n" +
-                "                                            style=\"padding: 20px 35px; text-align: left; color: #6f6f6f; font-family: sans-serif; border-top: 0;\">\n" +
-                "                                            <h1 class=\"tw-h1\"\n" +
-                "                                                style=\"font-size: 24px; font-weight: bold; mso-line-height-rule: exactly; line-height: 32px; margin: 0 0 20px; color: #474747;\">\n" +
-                "                                                Hello " + "name" + ",</h1>\n" +
-                "                                            <p class=\"\"\n" +
-                "                                               style=\"margin: 20px 0; font-size: 16px; mso-line-height-rule: exactly; line-height: 24px;\">\n" +
-                "                                            <span style=\"font-weight: 400;\">Thank you for joining <strong>Customer Engagement App</strong>, an efficient and smart solution to manage your health!</span><br/><br/><span\n" +
-                "                                                style=\"font-weight: 400;\">To complete the registration process, please confirm your email address to activate your account</span>\n" +
-                "                                            <table style=\"border: 0; width: 100%;\" cellspacing=\"0\" cellpadding=\"0\">\n" +
-                "                                                <tbody>\n" +
-                "                                                <tr>\n" +
-                "                                                    <td>\n" +
-                "                                                        <table class=\"button mobile-w-full\"\n" +
-                "                                                               style=\"border: 0px; border-radius: 7px; margin: 0px auto; width: 525px; background-color: #008bcb; height: 50px;\"\n" +
-                "                                                               cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n" +
-                "                                                            <tbody>\n" +
-                "                                                            <tr>\n" +
-                "                                                                <td class=\"button__td \"\n" +
-                "                                                                    style=\"border-radius: 7px; text-align: center; width: 523px;\"><!-- [if mso]>\n" +
-                "                                                                    <a href=\"\" class=\"button__a\" target=\"_blank\"\n" +
-                "                                                                       style=\"border-radius: 4px; color: #FFFFFF; display: block; font-family: sans-serif; font-size: 18px; font-weight: bold; mso-height-rule: exactly; line-height: 1.1; padding: 14px 18px; text-decoration: none; text-transform: none; border: 1px solid #316FEA;\"> </a>\n" +
-                "                                                                    <![endif]--> <!-- [if !mso]><!--> <a\n" +
-                "                                                                            class=\"button__a\"\n" +
-                "                                                                            style=\"border-radius: 4px; color: #ffffff; display: block; font-family: sans-serif; font-size: 18px; font-weight: bold; mso-height-rule: exactly; line-height: 1.1; padding: 14px 18px; text-decoration: none; text-transform: none; border: 0;\"\n" +
-                "                                                                            href=\"" + "link" + "\"\n" +
-                "                                                                            target=\"_blank\"\n" +
-                "                                                                            rel=\"noopener\">Confirm\n" +
-                "                                                                        email</a> <!--![endif]--></td>\n" +
-                "                                                            </tr>\n" +
-                "                                                            </tbody>\n" +
-                "                                                        </table>\n" +
-                "                                                    </td>\n" +
-                "                                                </tr>\n" +
-                "                                                </tbody>\n" +
-                "                                            </table>\n" +
-                "                                            <div class=\"\"\n" +
-                "                                                 style=\"border-top: 0; font-size: 1px; mso-line-height-rule: exactly; line-height: 1px; max-height: 0; margin: 20px 0; overflow: hidden;\">\n" +
-                "                                                \u200B\n" +
-                "                                            </div>\n" +
-                "                                            <p class=\"\"\n" +
-                "                                               style=\"margin: 20px 0; font-size: 16px; mso-line-height-rule: exactly; line-height: 24px;\">\n" +
-                "                                                Contact our support team if you have any questions or concerns.&nbsp;<a\n" +
-                "                                                    style=\"color: #316fea; text-decoration: none;\"\n" +
-                "                                                    href=\"javascript:void(0);\" target=\"_blank\" rel=\"noopener\">Ask us any\n" +
-                "                                                question</a></p>\n" +
-                "                                            <p class=\"tw-signoff\"\n" +
-                "                                               style=\"margin: 45px 0 5px; font-size: 16px; mso-line-height-rule: exactly; line-height: 24px;\">\n" +
-                "                                                Our best, <br/> The Customer Engagement App team</p>\n" +
-                "                                        </td>\n" +
-                "                                    </tr>\n" +
-                "                                    </tbody>\n" +
-                "                                </table>\n" +
-                "                            </td>\n" +
-                "                        </tr>\n" +
-                "                        </tbody>\n" +
-                "                    </table>", forgotPasswordServiceImplUnderTest.buildEmail("name", "link"));
+        assertEquals("result", forgotPasswordServiceImplUnderTest.buildEmail("name", "link"));
     }
 }

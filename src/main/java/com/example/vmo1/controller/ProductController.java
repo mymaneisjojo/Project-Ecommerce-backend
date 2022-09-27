@@ -3,25 +3,17 @@ package com.example.vmo1.controller;
 import com.example.vmo1.model.request.ProductRequest;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ProductResponse;
-import com.example.vmo1.repository.ImageRepository;
 import com.example.vmo1.security.service.CustomUserDetails;
-import com.example.vmo1.service.ImageService;
 import com.example.vmo1.service.ProductService;
 import com.example.vmo1.validation.annotation.CurrentUser;
 import com.example.vmo1.validation.annotation.ValidFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.io.InputStream;
 
 @RestController
 @RequestMapping("/api/v1/product")

@@ -1,5 +1,7 @@
 package com.example.vmo1.service.impl;
 
+import com.example.vmo1.commons.exceptions.BadRequestException;
+import com.example.vmo1.commons.exceptions.InvalidTokenRequestException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Account;
 import com.example.vmo1.model.entity.PasswordResetToken;
@@ -44,7 +46,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         LocalDateTime expiresAt = passwordResetToken.get().getExpiresAt();
 
         if (expiresAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("Token is already expired!");
+            throw new InvalidTokenRequestException("Token",token,  "Token is already expired!");
         }
 
         passwordResetTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
@@ -64,15 +66,15 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
             emailSender.sendEmail(account.getEmail(), buildEmail(account.getUsername(), link));
             return new MessageResponse(200,"Success: Token send successfully!");
         } else {
-            return new MessageResponse(404, "Fail: Email is not found");
+            throw new ResourceNotFoundException("Account", "email", request.getEmail());
         }
     }
     @Override
     public MessageResponse changePassword(PasswordResetRequest request){
         PasswordResetToken token = passwordResetTokenServiceImpl.getValidToken(request);
-        if(StringUtils.isEmpty(request.getEmail())){
-            return new MessageResponse(400,"A new password is required");
-        }
+//        if(StringUtils.isEmpty(request.getEmail())){
+//            throw new BadRequestException(400, "")
+//        }
         if(request.getToken().equals(token.getToken())){
             updatePassword(request.getEmail(), request.getPassword());
             passwordResetTokenServiceImpl.deleteToken(request);

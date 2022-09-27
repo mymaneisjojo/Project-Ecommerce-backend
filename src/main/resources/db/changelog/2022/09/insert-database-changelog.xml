@@ -136,6 +136,7 @@
             <column name="is_deleted" valueBoolean="false"/>
         </insert>
 
+
         <!--        insert product-->
         <insert tableName="product">
             <column name="id" valueNumeric="1"/>
@@ -148,6 +149,26 @@
             <column name="updated_at" valueDate="2022-09-09"/>
             <column name="is_deleted" valueBoolean="false"/>
 
+        </insert>
+
+        <!--        insert image-->
+        <insert tableName="image">
+            <column name="id" valueNumeric="1"/>
+            <column name="file_name" value="240854822_1041472853353034_50466502577158930_n"/>
+            <column name="file_type" value="image/jpeg"/>
+            <column name="image_url" value="http://res.cloudinary.com/dukdwp2nd/image/upload/v1663829286/sux39jqtegqllpxn57pz.jpg"/>
+            <column name="product_id" valueNumeric="1"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+        </insert>
+        <insert tableName="image">
+            <column name="id" valueNumeric="2"/>
+            <column name="file_name" value="241369672_1041473110019675_5851009691799626161_n"/>
+            <column name="file_type" value="image/jpeg"/>
+            <column name="image_url" value="http://res.cloudinary.com/dukdwp2nd/image/upload/v1663829289/sfxzl8tsxvdqxbpynref.jpg"/>
+            <column name="product_id" valueNumeric="1"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
         </insert>
 
         <!--        insert product size-->
