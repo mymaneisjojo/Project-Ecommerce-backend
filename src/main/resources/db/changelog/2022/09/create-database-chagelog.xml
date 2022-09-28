@@ -93,6 +93,7 @@
             <column name="product_id" type="BIGINT"/>
             <column name="created_at" type="DATETIME"/>
             <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="boolean"/>
         </createTable>
     </changeSet>
     <changeSet id="1663831464278-7" author="admin">
@@ -187,6 +188,7 @@
             <column name="banner" type="VARCHAR(255)"/>
             <column name="created_at" type="DATETIME"/>
             <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="boolean"/>
             <column name="account_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>

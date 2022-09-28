@@ -22,14 +22,14 @@ AuthControllerAdvice {
     }
 
     @ExceptionHandler(value = ResourceAlreadyInUseException.class)
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public ApiResponse handleResourceAlreadyInUseException(ResourceAlreadyInUseException ex, WebRequest request) {
         return new ApiResponse(HttpStatus.CONFLICT,false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ApiResponse handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return new ApiResponse(HttpStatus.NOT_FOUND,false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
@@ -63,10 +63,10 @@ AuthControllerAdvice {
         return new ApiResponse(HttpStatus.BAD_REQUEST, false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
     }
 
-    @ExceptionHandler(value = UpdatePasswordException.class)
+    @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     @ResponseBody
-    public ApiResponse handleUpdatePasswordException(UpdatePasswordException ex, WebRequest request) {
+    public ApiResponse handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
         return new ApiResponse(HttpStatus.EXPECTATION_FAILED, false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
     }
 

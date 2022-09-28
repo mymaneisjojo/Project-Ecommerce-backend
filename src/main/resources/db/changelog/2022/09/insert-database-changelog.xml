@@ -9,10 +9,10 @@
 <!--        insert admin-->
         <insert tableName="account">
             <column name="id" valueNumeric="1"/>
-            <column name="username" value="admin"/>
+            <column name="username" value="admin1234"/>
             <column name="full_name" value="super admin"/>
             <column name="email" value="admin@gmail.com"/>
-            <column name="phone" value="0372612247"/>
+            <column name="phone" value="0372612249"/>
             <column name="password" value="$2a$10$IR5otbmAMZj1m6C6nCM3iuY3XHBHz0KDf0D4LQR9ju/u.f2YJYNv."/>
             <column name="enable" valueBoolean="true"/>
             <column name="created_at" valueDate="2022-09-09"/>
@@ -22,7 +22,7 @@
 
         <insert tableName="account">
             <column name="id" valueNumeric="2"/>
-            <column name="username" value="hue"/>
+            <column name="username" value="hue1234"/>
             <column name="full_name" value="Nguyen Thi Hue"/>
             <column name="email" value="nguyenhue11052001@gmail.com"/>
             <column name="phone" value="0372612248"/>
@@ -65,6 +65,7 @@
             <column name="account_id" value="2"/>
             <column name="created_at" valueDate="2022-09-09"/>
             <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
         </insert>
 
 <!--        insert category-->
@@ -160,6 +161,7 @@
             <column name="product_id" valueNumeric="1"/>
             <column name="created_at" valueDate="2022-09-09"/>
             <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
         </insert>
         <insert tableName="image">
             <column name="id" valueNumeric="2"/>
@@ -169,6 +171,7 @@
             <column name="product_id" valueNumeric="1"/>
             <column name="created_at" valueDate="2022-09-09"/>
             <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
         </insert>
 
         <!--        insert product size-->

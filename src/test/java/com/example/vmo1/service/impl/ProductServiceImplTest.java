@@ -865,7 +865,7 @@ public class ProductServiceImplTest {
         account1.setCreated_at(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
         shop2.setAccount(account1);
         final ProductResponse expectedResult = new ProductResponse(Arrays.asList(
-                ), 0, 0, 0L, 1,
+        ), 0, 0, 0L, 1,
                 true);
         when(mockProductRepository.findAllByShopId(any(Pageable.class), eq(0L)))
                 .thenReturn(new PageImpl<>(Collections.emptyList()));
@@ -1130,3 +1130,4 @@ public class ProductServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> productServiceImplUnderTest.deleteProduct(1L));
     }
 }
+

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RefeshTokenServiceImplTest {
+public class RefreshTokenServiceImplTest {
 
     @Mock
     private RefreshTokenRepository mockRefreshTokenRepository;
@@ -29,7 +29,7 @@ public class RefeshTokenServiceImplTest {
     private AccountRepository mockAccountRepository;
 
     @InjectMocks
-    private RefeshTokenServiceImpl refeshTokenServiceImplUnderTest;
+    private RefreshTokenServiceImpl refreshTokenServiceImplUnderTest;
 
     @Test
     public void testFindByToken() {
@@ -79,7 +79,7 @@ public class RefeshTokenServiceImplTest {
         when(mockRefreshTokenRepository.findByToken("token")).thenReturn(refreshToken);
 
         // Run the test
-        final Optional<RefreshToken> result = refeshTokenServiceImplUnderTest.findByToken("token");
+        final Optional<RefreshToken> result = refreshTokenServiceImplUnderTest.findByToken("token");
 
         // Verify the results
         assertEquals(expectedResult, result);
@@ -91,7 +91,7 @@ public class RefeshTokenServiceImplTest {
         when(mockRefreshTokenRepository.findByToken("token")).thenReturn(Optional.empty());
 
         // Run the test
-        final Optional<RefreshToken> result = refeshTokenServiceImplUnderTest.findByToken("token");
+        final Optional<RefreshToken> result = refreshTokenServiceImplUnderTest.findByToken("token");
 
         // Verify the results
         assertEquals(Optional.empty(), result);
@@ -165,7 +165,7 @@ public class RefeshTokenServiceImplTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0)))).thenReturn(refreshToken);
 
         // Run the test
-        final RefreshToken result = refeshTokenServiceImplUnderTest.createRefreshToken(0L);
+        final RefreshToken result = refreshTokenServiceImplUnderTest.createRefreshToken(0L);
 
         // Verify the results
         assertEquals(expectedResult, result);
@@ -222,7 +222,7 @@ public class RefeshTokenServiceImplTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0)))).thenReturn(refreshToken);
 
         // Run the test
-        final RefreshToken result = refeshTokenServiceImplUnderTest.createRefreshToken(0L);
+        final RefreshToken result = refreshTokenServiceImplUnderTest.createRefreshToken(0L);
 
         // Verify the results
         assertEquals(expectedResult, result);
@@ -274,7 +274,7 @@ public class RefeshTokenServiceImplTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0));
 
         // Run the test
-        final RefreshToken result = refeshTokenServiceImplUnderTest.verifyExpiration(token);
+        final RefreshToken result = refreshTokenServiceImplUnderTest.verifyExpiration(token);
 
         // Verify the results
         assertEquals(expectedResult, result);
@@ -310,7 +310,7 @@ public class RefeshTokenServiceImplTest {
         when(mockRefreshTokenRepository.deleteByAccount(any(Account.class))).thenReturn(0);
 
         // Run the test
-        final int result = refeshTokenServiceImplUnderTest.deleteByUserId(0L);
+        final int result = refreshTokenServiceImplUnderTest.deleteByUserId(0L);
 
         // Verify the results
         assertEquals(0, result);
@@ -322,6 +322,6 @@ public class RefeshTokenServiceImplTest {
         when(mockAccountRepository.findById(0L)).thenReturn(Optional.empty());
 
         // Run the test
-        assertThrows(NoSuchElementException.class, () -> refeshTokenServiceImplUnderTest.deleteByUserId(0L));
+        assertThrows(NoSuchElementException.class, () -> refreshTokenServiceImplUnderTest.deleteByUserId(0L));
     }
 }

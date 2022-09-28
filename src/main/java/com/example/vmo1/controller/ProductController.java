@@ -6,7 +6,6 @@ import com.example.vmo1.model.response.ProductResponse;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.ProductService;
 import com.example.vmo1.validation.annotation.CurrentUser;
-import com.example.vmo1.validation.annotation.ValidFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class ProductController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> uploadMultipleFiles(@ValidFile @RequestPart("files") MultipartFile[] files, @Valid @RequestPart ProductRequest metaData) {
+    public ResponseEntity<?> uploadMultipleFiles(@RequestPart("files") MultipartFile[] files, @Valid @RequestPart ProductRequest metaData) {
         return ResponseEntity.ok(productService.save(metaData, files));
     }
 

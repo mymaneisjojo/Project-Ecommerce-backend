@@ -73,7 +73,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> sendTokenToChangePassword(@RequestBody PasswordResetLinkRequest request) {
+    public ResponseEntity<?> sendTokenToChangePassword(@Valid @RequestBody PasswordResetLinkRequest request) {
         return ResponseEntity.ok(forgotPasswordService.sendTokenToChangePassword(request));
     }
 

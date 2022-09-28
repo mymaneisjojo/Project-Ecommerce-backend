@@ -48,7 +48,7 @@ public class AdminController {
     }
 
     @PutMapping("/account/update/{id}")
-    public ResponseEntity<?> updateAccountByAdmin(@Valid@RequestBody UpdateAccountByAdminRequest request, @PathVariable("id") long id){
+    public ResponseEntity<?> updateAccountByAdmin(@Valid @RequestBody UpdateAccountByAdminRequest request, @PathVariable("id") long id){
         AccountDtoToResponse accountResponse = accountService.updateAccountByAdmin(request, id);
         return ResponseEntity.ok(accountResponse);
     }

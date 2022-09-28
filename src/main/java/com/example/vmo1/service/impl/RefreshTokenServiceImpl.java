@@ -8,13 +8,12 @@ import com.example.vmo1.service.RefeshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class RefeshTokenServiceImpl implements RefeshTokenService {
+public class RefreshTokenServiceImpl implements RefeshTokenService {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
     @Autowired

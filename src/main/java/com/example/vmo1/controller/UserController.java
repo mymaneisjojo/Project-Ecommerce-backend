@@ -20,7 +20,7 @@ public class UserController {
     private AccountService accountService;
 
     @PutMapping("/profile-update")
-    public ResponseEntity<?> updateProfile(@CurrentUser CustomUserDetails customUserDetails, @RequestBody UpdateAccountRequest updateAccountRequest){
+    public ResponseEntity<?> updateProfile(@CurrentUser CustomUserDetails customUserDetails,@Valid @RequestBody UpdateAccountRequest updateAccountRequest){
         AccountDtoToResponse accountResponse = accountService.updateProfile(customUserDetails, updateAccountRequest);
         return new ResponseEntity<>(accountResponse, HttpStatus.OK);
     }

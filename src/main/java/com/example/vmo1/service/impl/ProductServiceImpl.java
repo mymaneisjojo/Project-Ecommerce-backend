@@ -3,7 +3,6 @@ package com.example.vmo1.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.vmo1.commons.configs.MapperUtil;
-import com.example.vmo1.commons.exceptions.BadRequestException;
 import com.example.vmo1.commons.exceptions.InvalidIdException;
 import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Image;
@@ -12,27 +11,19 @@ import com.example.vmo1.model.request.ProductRequest;
 import com.example.vmo1.model.response.ProductResponse;
 import com.example.vmo1.repository.ImageRepository;
 import com.example.vmo1.repository.ProductRepository;
-import com.example.vmo1.repository.ShopRepository;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private ImageRepository imageRepository;
     @Autowired
     private Cloudinary cloudinary;
+
 
     @Override
     public ProductRequest save(ProductRequest metaData, MultipartFile[] files) {
@@ -86,10 +78,12 @@ public class ProductServiceImpl implements ProductService {
 
         return result;
     }
+
+
     @Override
     public ProductRequest updateProduct(ProductRequest metaData, long id, MultipartFile[] files) {
         Product product = MapperUtil.map(productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id)), Product.class);
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id)), Product.class);
         imageRepository.deleteImagesByProduct(product.getId());
 
         return save(metaData, files);
@@ -117,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "Find product by id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
         return product;
     }
 
@@ -127,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidIdException("Id must bigger than 1", id);
         }
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product","id", id));
         product.set_deleted(true);
         productRepository.save(product);
     }

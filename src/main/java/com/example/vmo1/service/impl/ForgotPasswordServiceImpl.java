@@ -85,7 +85,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     }
     @Override
     public boolean updatePassword(String email, String password){
-        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Find email","email", email ));
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Account","email", email ));
         String encodedPassword = passwordEncoder.encode(password);
         account.setPassword(encodedPassword);
         accountRepository.save(account);

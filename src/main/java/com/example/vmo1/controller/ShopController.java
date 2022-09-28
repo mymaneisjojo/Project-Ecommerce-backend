@@ -1,5 +1,6 @@
 package com.example.vmo1.controller;
 
+import com.example.vmo1.model.entity.Shop;
 import com.example.vmo1.model.request.ShopDto;
 import com.example.vmo1.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ShopController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestPart ShopDto metaData, @PathVariable("id") long id, @RequestPart MultipartFile file){
+    public ResponseEntity<?> update(@Valid @RequestPart ShopDto metaData, @PathVariable("id") long id, @RequestPart MultipartFile file){
         ShopDto shopResponse = shopService.update(metaData, id, file);
         return new ResponseEntity<>(shopResponse, HttpStatus.OK);
     }
