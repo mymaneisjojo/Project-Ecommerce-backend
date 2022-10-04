@@ -28,8 +28,4 @@ public class ShopController {
         return new ResponseEntity<>(shopResponse, HttpStatus.OK);
     }
 
-//    @GetMapping("/count")
-//    public ResponseEntity<?> count(){
-//        return ResponseEntity.ok(shopService.statistProduct());
-//    }
 }

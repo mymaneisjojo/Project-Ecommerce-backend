@@ -100,7 +100,6 @@ public class ShopServiceImplTest {
         // Configure Cloudinary.uploader(...).
         final Uploader uploader = new Uploader(new Cloudinary(new HashMap<>()), null);
         when(mockCloudinary.uploader()).thenReturn(uploader);
-
         // Configure ShopRepository.save(...).
         final Shop shop2 = new Shop();
         shop2.setId(0L);
