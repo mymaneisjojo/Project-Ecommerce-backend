@@ -1,5 +1,6 @@
 package com.example.vmo1.repository;
 
+import com.example.vmo1.model.entity.Orders;
 import com.example.vmo1.model.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     int countProductsByShopId(long shop_id);
 
-
-    Page<Product> findAllByShopId(Pageable pageable, long shop_id);
+    Page<Product> findAllByShopId(Pageable pageable, Long id);
 }

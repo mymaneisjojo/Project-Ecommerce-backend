@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public interface ShopService {
     ShopDtoToResponse add(ShopDto metaData, MultipartFile file) throws IOException;
-    ShopDto update(ShopDto metaData, long id, MultipartFile file);
+    ShopDto update(ShopDto metaData, long id, MultipartFile file) throws IOException;
     ShopResponse getAllShop(int pageNo, int pageSize);
 
     StatisticResponse statistProduct();

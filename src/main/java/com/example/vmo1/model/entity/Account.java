@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -65,5 +66,7 @@ public class Account {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "account", cascade={CascadeType.ALL})
+    private List<Orders> orders;
 }
 

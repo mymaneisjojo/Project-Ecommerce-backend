@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers("/api/v1/product/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/api/v1/shop/**").hasRole("USER")
+                .antMatchers("/api/v1/orders/**").hasRole("USER")
                 .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v2/**").permitAll()
                 .anyRequest().authenticated();
 

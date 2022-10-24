@@ -62,11 +62,15 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopDto update(ShopDto metaData, long id, MultipartFile file) {
-        Shop shop = MapperUtil.map(shopRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Shop","id", id)), Shop.class);
+    public ShopDto update(ShopDto metaData, long id, MultipartFile file) throws IOException {
+        Shop shop = shopRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop","id", id));
+        Shop saveShop = MapperUtil.map(metaData, Shop.class);
+        Map result = upload(file);
+        // save image to field banner in shop
+        shop.setBanner((String)result.get("url"));
 
-        return MapperUtil.map(shopRepository.save(shop), ShopDto.class);
+        return MapperUtil.map(shopRepository.save(saveShop), ShopDto.class);
     }
 
     @Override

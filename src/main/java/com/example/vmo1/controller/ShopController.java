@@ -23,7 +23,7 @@ public class ShopController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestPart ShopDto metaData, @PathVariable("id") long id, @RequestPart MultipartFile file){
+    public ResponseEntity<?> update(@Valid @RequestPart ShopDto metaData, @PathVariable("id") long id, @RequestPart MultipartFile file) throws IOException{
         ShopDto shopResponse = shopService.update(metaData, id, file);
         return new ResponseEntity<>(shopResponse, HttpStatus.OK);
     }
